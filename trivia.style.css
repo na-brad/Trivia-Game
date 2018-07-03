@@ -1,0 +1,85 @@
+h1{
+    font-family: "magic";
+    font-size:100px;
+    color:gold;
+    text-align: center; 
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+h2,h4{
+    font-family: "harry";
+    color:white;
+}
+#start{
+text-align: center;
+}
+#content{
+    background-color:rgba(0,0,0, 0.8);
+    padding: 20px 40px;
+    margin-top: 10px;
+}
+
+@font-face {
+  font-family: "magic";
+  src: url("magic-school.one.ttf") format("truetype");
+}
+@font-face{
+    font-family: "harry";
+    src: url("harrypotter.ttf") format("truetype");
+}
+body{
+    /* background-image: url("https://media.giphy.com/media/Bh3YfliwBZNwk/giphy.gif"); */
+    /* background-image: url("https://media.giphy.com/media/gyC0CPceyEKYw/giphy.gif"); */
+    background-image: url("https://media.giphy.com/media/twvpowQ5nv3tm/giphy.gif");
+    background-size: cover;
+    /* padding-bottom: 51%; */
+    /* background-repeat: no-repeat; */
+}
+h2{
+    color:red;
+}
+#question{
+    color:gold;
+}
+#correctAnswer, h3{
+    color:white;
+    font-size:25px;
+    font-family: "harry";
+    text-align: center;
+}
+#verdict{
+    font-family:"harry";
+    text-align: center;
+    font-size:40px;
+
+}
+#timeLeft, #gif{
+text-align: center;
+}
+#gif{
+    padding-bottom:50px;
+    margin-top:30px;
+}
+#start{
+    position: relative;
+    left: 45%;
+    margin-top:12%;
+    background-color: rgba(0,0,0, 0);
+    color:gold;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+#playAgain{
+    position: relative;
+    left:42%;
+    color:gold;
+    background-color: rgba(0,0,0,0)
+
+}
+button{
+    font-family: "harry";
+    font-size:40px;
+    /* background-color: rgba(0,0,0, 0); */
+    border-style: none;
+}
+#timeLeft{
+
+}

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="trivia.style.css">
+    
+</head>
+
+<body>
+    <div class="container">
+        <h1>Back to Hogwarts Trivia</h1>
+        <button id="start"><i class="fas fa-bolt"></i> Start <i class="fas fa-bolt"></i>
+        </button>
+        <div id="timeLeft">
+            <h2>Time Remaining:
+                <span id="time"></span>
+            </h2>
+        </div>
+
+        <div id="content">
+            <div id="ask">
+                <div>
+                    <h2>
+                        <span id="question"></span>
+                    </h2>
+                </div>
+                <div>
+                    <h4 class="answer" id="answerA"></h4>
+                </div>
+                <div>
+                    <h4 class="answer" id="answerB"></h4>
+                </div>
+                <div>
+                    <h4 class="answer" id="answerC"></h4>
+                </div>
+                <div>
+                    <h4 class="answer" id="answerD"></h4>
+                </div>
+            </div>
+
+            <div id="result">
+                <h3 id="verdict"></h3>
+                <h3 id="correctAnswer"></h3>
+                <div id="gif"></div>
+            </div>
+
+            <div id="end">
+                <h3 id="correct"></h3>
+                <h3 id="wrong"></h3>
+                <h3 id="unanswered"></h3>
+                <button id="playAgain">Play again?</button>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript">
+
+        var questions = ["Whom do Harry, Ginny, and Neville join in a Hogwarts Express compartment at the beginning of Harry’s fifth year?", "What type of quill does wizarding journalist Rita Skeeter favor?", "The Divination classroom is at the top of which Hogwarts tower?", "Who wrote the Hogwarts textbook ‘A History of Magic’?", "In his first class with Professor Slughorn, Harry wins a tiny glass bottle of which potion?", "During Harry’s first Transfiguration lesson, Professor McGonagall Transfigures her desk into which animal?", "Who said ‘… I was ready to risk everything for him. I was ready. It was my dream, my greatest ambition, to serve him, to prove myself to him.’", "How does Professor Trelawney spell her first name?", "Which of the following is NOT a book written by Gilderoy Lockhart?", "Which team from the Ministry of Magic is responsible for modifying the memories of Muggles who have been exposed to magic?"];
+
+        var answers = [{ A: "Cho Chang", B: "Luna Lovegood", C: "Remus Lupin", D: "Ron Weasley" }, { A: "Sugar Quill", B: "Quick-Quotes Quill", C: "Smart-Answer Quill", D: "Scrivenshaft's pheasant feather" }, { A: "South Tower", B: "North Tower", C: "West Tower", D: "East Tower" }, { A: "Quentin Trimble", B: "Adalbert Waffling", C: "Arsenius Jiggle", D: "Bathilda Bagshot" }, { A: "Polyjuice", B: "Felix Felicis", C: "Veritaserum", D: "Amortentia" }, { A: "A pig", B: "A disgruntled whale", C: "A cow", D: "A cat" }, { A: "Lucius Malfoy", B: "Bellatrix Lestrange", C: "Barty Crouch Jr.", D: "Wormtail" }, { A: "Cybill", B: "Cybil", C: "Sybil", D: "Sybill" }, { A: "Gadding with Ghouls", B: "Voyages with Vampires", C: "Trouble with Trolls", D: "Holidays with Hags" }, { A: "Aurors", B: "The Wizengamot", C: "Obliviators", D: "Unspeakables" }];
+
+        var answerKey = ["Luna Lovegood", "Quick-Quotes Quill", "North Tower", "Bathilda Bagshot", "Felix Felicis", "A pig", "Barty Crouch Jr.", "Sybill", "Trouble with Trolls", "Obliviators"];
+
+        var gifsArr = ["https://media.giphy.com/media/BxYmEq7Ksqlbi/source.gif", "https://media.giphy.com/media/yjA0DFX8XBI6k/giphy.gif", "https://media.giphy.com/media/Y9XgDeWhMyDW8/giphy.gif", "https://media.giphy.com/media/Nq5gOMB69ui6A/giphy.gif", "https://media.giphy.com/media/WLXYBlFuBiuQM/giphy.gif", "https://media.giphy.com/media/XsesspPw21oOI/giphy.gif", "https://media.giphy.com/media/aaoG2VSbUdUe4/giphy.gif", "https://media.giphy.com/media/YfMOaf7yzR1mw/giphy.gif", "https://media.giphy.com/media/10VFsVAHpF4y1G/giphy.gif", "https://media.giphy.com/media/8fdezeSQWv4SQ/giphy.gif"];
+
+
+        var timer = 31;
+
+        var intervalGif;
+        var intervalStart;
+
+        var count = 0;
+        var correct = 0;
+        var wrong = 0;
+        var unanswered = 0;
+
+        // $("#button").hide();
+        // $(p).hide();
+        // $("#timeLeft").hide();
+        $("#content").hide();
+        $("#gif").hide();
+        $("#timeLeft").hide();
+        $("#playAgain").hide();
+        $("#start").on("click", start)
+        $("#playAgain").on("click", restart)
+        
+        function start() {
+            $("#content").show();
+            $("#question").html("");
+            $(".answer").html("");
+            $("#question").html("<h2 style='color:gold'>" + questions[0] + "</h2>");
+            $("#answerA").html(answers[0].A);
+            $("#answerB").html(answers[0].B);
+            $("#answerC").html(answers[0].C);
+            $("#answerD").html(answers[0].D);
+            $("#result").hide();
+            $("#end").hide();
+            $("#start").hide();
+            $("#timeLeft").show();
+            $("#ask").show();
+            
+
+            run();
+
+
+
+        }
+        function run() {
+            clearInterval(intervalStart);
+            //needs to clear the intervalId so it doesnt compound
+
+            intervalStart = setInterval(decrement, 1000);
+        }
+        function decrement() {
+            timer--;
+            if (timer == 0) {
+                timer = 0;
+                clearInterval(intervalStart);
+                reveal();
+                $("#correctAnswer").show();
+                $("#verdict").css("color", "red");
+                $("#verdict").html("Time's up!");
+                count++;
+                unanswered++;
+            }
+            $("#time").html(timer + " seconds");
+            console.log(timer);
+
+        }
+
+        function nextQ() {
+            //hide #result
+
+            $("#result").hide();
+            $("#ask").show();
+            clearInterval(intervalStart);
+            //show #ask
+            if (count + 1 > questions.length) {
+                //display #end
+                $("#result").hide();
+                $("#ask").hide();
+                $("#correct").html("# Correct: " + correct);
+                $("#wrong").html("# Wrong: " + wrong);
+                $("#unanswered").html("# Unanswered: " + unanswered);
+                $("#end").show();
+                $("#playAgain").show();
+
+
+
+            }
+            else {
+                run();
+                $("#question").html(questions[count]);
+                $("#answerA").html(answers[count].A);
+                $("#answerB").html(answers[count].B);
+                $("#answerC").html(answers[count].C);
+                $("#answerD").html(answers[count].D);
+            }
+
+        }
+
+        $(".answer").on("click", function () {
+            clearInterval(intervalStart);
+            if ($(this).text() == answerKey[count]) {
+                //reveal answer page
+                //display correct
+                reveal();
+                $("#correctAnswer").hide();
+                $("#verdict").css("color", "green");
+                $("#verdict").html("Right on!");
+                correct++;
+                count++;
+
+            }
+            else {
+                //reveal answer page
+                reveal();
+                $("#correctAnswer").show();
+                $("#verdict").css("color", "red");
+                $("#verdict").html("Wrong!");
+
+                //display incorrect
+                count++;
+                wrong++;
+            }
+        })
+
+        function startGif() {
+            $("#gif").html("<img src='" + gifsArr[count] + "' width='400px'>");
+            intervalGif = setInterval(nextQ, 3000);
+
+        }
+
+        function reveal() {
+            //hide #ask
+            //show #result
+            $("#gif").show();
+            $("#ask").hide();
+            $("#result").show();
+            $("#correctAnswer").text("The correct answer was: " + answerKey[count]);
+            clearInterval(intervalGif);
+            timer = 30;
+            $("#time").html(timer + " seconds");
+            startGif();
+
+            //display gif
+            //start two second timer
+
+        }
+        function restart() {
+            count = 0;
+            timer = 31;
+            clearInterval(intervalGif);
+            clearInterval(intervalStart);
+            start();
+        }
+
+
+
+    </script>
+</body>
+
+
+</html>
